@@ -1,4 +1,4 @@
--- load config
+-- load config, client, and socket
 local config = require('config')
 local Client = require('client.init')
 local socket = require('socket')
