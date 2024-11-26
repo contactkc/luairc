@@ -4,6 +4,7 @@ Simple command-line interface IRC client written in Lua.
 ## How It's Made:
 
 **Tech used:** Lua
+
 **Dependencies** [LuaSocket](https://w3.impa.br/~diego/software/luasocket/)
 
 ## How to Use:
