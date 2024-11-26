@@ -1,13 +1,29 @@
 -- load config
 local config = require('config')
-local client = require('client')
+local Client = require('client.init')
+local socket = require('socket')
 
 -- initialize client
-client.connect(config.server, config.port)
-client.login(config.nick, config.username)
+Client.connect(config.server, config.port)
+Client.login(config.nick, config.username)
+
+print('IRC client has started! Please type commands to start. /help if stuck.')
 
 -- loop to handle user input
 while true do
+    -- checks for incoming messages
+    local serverMsg = Client.receive()
+    if serverMsg then
+        print(serverMsg)
+    end
+
+    -- reads user input
+    io.write('> ')
     local input = io.read()
-    client.handleInput(input)
+    if input and input ~= '' then
+        Client.handleInput(input)
+    end
+
+    -- possible cpu overuse so sleep to prevent
+    socket.sleep(0.1)
 end
