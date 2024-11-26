@@ -10,7 +10,7 @@ Simple command-line interface IRC client written in Lua.
 
 1. Clone the repository:
 ```
-git clone https://github.com/contactkc/sudoku.git
+git clone https://github.com/contactkc/luairc.git
 ```
 2. Navigate to the project directory:
 ```
