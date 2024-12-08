@@ -4,6 +4,9 @@ local Hangman =  require('games.hangman')
 local TicTacToe = require('games.tic_tac_toe')
 local Commands = {}
 
+-- global state to track if user has joined a channel
+local currChannel = nil
+
 -- list of commands to show when calling /help
 local cmdList = {
     quit = '/quit to disconnect from the server',
@@ -19,17 +22,31 @@ local cmdList = {
 function Commands.handleCommand(input)
     local command, params = input:match('^/(%S+)%s*(.*)$')
     if command == 'join' then
-        connection.send('JOIN ' .. params)
+        if params ~= '' then
+            connection.send('JOIN ' .. params)
+            currentChannel = params
+            print('Joined channel: ' .. params)
+        else
+            print('Usage: /join <channel>')
+        end
     elseif command == 'msg' then
-        local target, message = params:match('^(%S+)%s*(.*)$')
-        connection.send('PRIVMSG ' .. target .. ' :' .. message)
+        if currentChannel then
+            local target, message = params:match('^(%S+)%s*(.*)$')
+            if target and message ~= '' then
+                connection.send('PRIVMSG ' .. target .. ' :' .. message)
+            else
+                print('Usage: /msg <target> <message>')
+            end
+        else
+            print('You are not in a channel! Please join one before messaging.')
+        end
     elseif command == 'quit' then
         connection.send('QUIT :Til next time!')
         os.exit()
     elseif command == 'help' then
         print('All commands:')
         for cmd, desc in pairs(cmdList) do
-            print(" - " .. desc)
+            print(' - ' .. desc)
         end
     elseif command == 'guessnumber' then
         GuessNumber.startGame()
