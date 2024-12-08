@@ -26,11 +26,11 @@ end
 -- handles timeouts, reads incoming single line messages from server and returns nil if nothing
 function Connection.receive()
     if clientSocket then 
-        local line, err = clientSocket:receive("*l")
+        local line, err = clientSocket:receive('*l')
         if not err then
             return line
-        elseif err ~= "timeout" then
-            print("Error receiving data: " .. err)
+        elseif err ~= 'timeout' then
+            print('Error receiving data: ' .. err)
         end
     end
     return nil
