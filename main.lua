@@ -57,7 +57,6 @@ end
 if loginSuccess then
     Client.login(config.nick, config.username)
     print('IRC client has started! Please type commands to start. /help if stuck.')
-    local inChannel = false
 
     -- coroutines for server messages and user input
     local function handleServerMessages()
@@ -81,12 +80,16 @@ if loginSuccess then
         end
     end
 
+    local function handlePolling()
+        while true do
+            connection.main_loop()  -- poll for new messages continuously
+            coroutine.yield()  -- yield control to allow other coroutines
+        end
+    end
+
     local serverCoroutine = coroutine.create(handleServerMessages)
     local inputCoroutine = coroutine.create(handleUserInput)
-    local mainLoopCoroutine = coroutine.create(function()
-        connection.main_loop()
-    end)
-    
+    local pollingCoroutine = coroutine.create(handlePolling)
 
     -- main loop
     while true do
@@ -105,7 +108,7 @@ if loginSuccess then
         end
 
         -- attempt to resume main loop coroutine
-        success, result = coroutine.resume(mainLoopCoroutine)
+        success, result = coroutine.resume(pollingCoroutine)
         if not success then
             print('Error in main loop: ', result)
             os.exit()

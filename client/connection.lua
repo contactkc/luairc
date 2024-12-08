@@ -29,13 +29,13 @@ function receive()
         if ready then
             local response, err = conn:receive('*l') -- read a line from server
             if response then
-                -- only haandles PRIVMSG lines which are server messages from others or private messages
+                -- only handles PRIVMSG lines which are server messages from others or private messages
                 if response:match('^:.* PRIVMSG') then
                     -- extract the nickname, target (channel/user), and message
                     local sender, target, message = response:match(':(%S+)!.* PRIVMSG (%S+) :(.+)')
                     if sender and target and message then
                         -- format the message to send to client 'Received nickname target: message'
-                        return string.format('Received: %s %s: %s', sender, target, message)
+                        return string.format('Received: %s PRIVMSG: %s', sender, message)
                     end
                 end
             elseif err == 'timeout' then
