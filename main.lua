@@ -10,7 +10,7 @@ Client.connect(config.server, config.port)
 -- coroutine authentication for logging in
 local function authenticateUser()
     while true do
-        print('Do you want to (1) Sign up or (2) Login?')
+        print('Do you want to (1) Sign up or (2) Login? (3) or /quit to exit program.')
         io.write('> ')
         local choice = io.read()
 
@@ -25,6 +25,9 @@ local function authenticateUser()
             if auth.login() then
                 return true
             end
+        elseif choice == '3' or choice:lower() == '/quit' then
+            print('Til next time!')
+            os.exit()
         else
             print('Invalid option. Try 1 for signing up or 2 for logging in.')
         end
