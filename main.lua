@@ -1,8 +1,9 @@
--- load config, client, and socket
+-- load config, client, auth, connection, and socket
 local config = require('config')
 local Client = require('client.init')
 local socket = require('socket')
 local auth = require('client.auth')
+local connection = require('client.connection')
 
 -- initialize client
 Client.connect(config.server, config.port)
@@ -56,6 +57,7 @@ end
 if loginSuccess then
     Client.login(config.nick, config.username)
     print('IRC client has started! Please type commands to start. /help if stuck.')
+    local inChannel = false
 
     -- coroutines for server messages and user input
     local function handleServerMessages()
@@ -81,11 +83,34 @@ if loginSuccess then
 
     local serverCoroutine = coroutine.create(handleServerMessages)
     local inputCoroutine = coroutine.create(handleUserInput)
+    local mainLoopCoroutine = coroutine.create(function()
+        connection.main_loop()
+    end)
+    
 
     -- main loop
     while true do
-        coroutine.resume(serverCoroutine)
-        coroutine.resume(inputCoroutine)
+        -- attempt to resume server messgae coroutine
+        local success, result = coroutine.resume(serverCoroutine)
+        if not success then
+            print('Error receiving server messages: ', result)
+            os.exit()
+        end
+        
+        -- attempt to resume input handler coroutine
+        success, result = coroutine.resume(inputCoroutine)
+        if not success then
+            print('Error receiving user input: ', result)
+            os.exit()
+        end
+
+        -- attempt to resume main loop coroutine
+        success, result = coroutine.resume(mainLoopCoroutine)
+        if not success then
+            print('Error in main loop: ', result)
+            os.exit()
+        end
+
         socket.sleep(0.1) -- to reduce cpu usage
     end
 else
