@@ -29,23 +29,23 @@ end
 
 -- function to hash using openssl
 local function hashPassword(password)
-    local digest = openssl.digest.new("sha256")
+    local digest = openssl.digest.new('sha256')
     return digest:final(password)
 end
 
 -- function to handle signup
 function M.signup()
-    io.write("Enter your desired username: ")
+    io.write('Enter your desired username: ')
     local username = io.read()
     local users = loadUsers()
 
     -- checks if username already exists
     if users[username] then
-        print("Username already exists. Please choose another.")
+        print('Username already exists. Please choose another.')
         return false
     end
 
-    io.write("Enter your password: ")
+    io.write('Enter your password: ')
     local password = io.read()
 
     -- hashing the password using SHA256 for security
@@ -53,16 +53,16 @@ function M.signup()
 
     -- saves the new user with the hashed password
     saveUser(username, hashedPassword)
-    print("Signup successful! You can now login.")
+    print('Signup successful! You can now login.')
     return true
 end
 
 -- function to handle login
 function M.login()
-    io.write("Enter your username: ")
+    io.write('Enter your username: ')
     local username = io.read()
     
-    io.write("Enter your password: ")
+    io.write('Enter your password: ')
     local password = io.read()
 
     -- hash the entered password
@@ -71,10 +71,10 @@ function M.login()
 
     -- verify login credentials by comparing hashed passwords
     if users[username] == hashedPassword then
-        print("Login successful!")
+        print('Login successful!')
         return true
     else
-        print("Invalid username or password.")
+        print('Invalid username or password.')
         return false
     end
 end
