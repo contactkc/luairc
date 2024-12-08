@@ -1,0 +1,2 @@
+# prevents pushing local logins in users.txt for privacy
+/client/users.txt
