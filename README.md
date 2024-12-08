@@ -5,7 +5,7 @@ Simple command-line interface IRC client written in Lua.
 
 **Tech used:** Lua
 
-**Dependencies** [LuaSocket](https://w3.impa.br/~diego/software/luasocket/)
+**Dependencies** [LuaSocket](https://w3.impa.br/~diego/software/luasocket/) [OpenSSL](https://luarocks.org/modules/zhaozg/openssl)
 
 ## How to Use:
 
