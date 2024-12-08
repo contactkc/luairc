@@ -1,6 +1,6 @@
 local Hangman = {}
 
--- Function to read the words from the words.txt file
+-- function to read the words from the words.txt file
 local function loadWords()
     local words = {}
     local file = io.open("games/words.txt", "r")
@@ -16,7 +16,7 @@ local function loadWords()
     return words
 end
 
--- Function to start the Hangman game
+-- function to start game
 function Hangman.startGame()
     local words = loadWords()
     if #words == 0 then
@@ -30,25 +30,24 @@ function Hangman.startGame()
     local attemptsLeft = maxAttempts
     local wordProgress = {}
 
-    -- Initialize wordProgress with underscores
+    -- initialize wordProgress with underscores
     for i = 1, #wordToGuess do
         wordProgress[i] = "_"
     end
 
-    -- Game loop
     print("Welcome to Hangman!")
     print("The word has " .. #wordToGuess .. " letters.")
     print("You have " .. attemptsLeft .. " tries left.")
 
     while attemptsLeft > 0 do
-        -- Display current word progress
+        -- displays current word progress
         print("Current word: " .. table.concat(wordProgress, " "))
 
-        -- Get user input
+        -- get user input
         io.write("Enter a letter: ")
         local input = io.read():lower()
 
-        -- Validate input
+        -- validate the user input
         if #input ~= 1 or not input:match("%a") then
             print("Please enter a single letter.")
         elseif guessedLetters[input] then
@@ -56,7 +55,7 @@ function Hangman.startGame()
         else
             guessedLetters[input] = true
 
-            -- Check if the letter is in the word
+            -- check if the letter is in the word
             local correctGuess = false
             for i = 1, #wordToGuess do
                 if wordToGuess:sub(i, i) == input then
@@ -73,7 +72,7 @@ function Hangman.startGame()
             end
         end
 
-        -- Check if the word is fully guessed
+        -- check if the word is fully guessed
         if table.concat(wordProgress) == wordToGuess then
             print("Congratulations! You've guessed the word: " .. wordToGuess)
             return
