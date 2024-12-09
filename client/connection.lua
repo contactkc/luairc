@@ -1,4 +1,5 @@
 local socket = require('socket')
+local config = require('config')
 local conn
 
 -- function to create a tcp socket and connect to the server
@@ -34,8 +35,25 @@ function receive()
                     -- extract the nickname, target (channel/user), and message
                     local sender, target, message = response:match(':(%S+)!.* PRIVMSG (%S+) :(.+)')
                     if sender and target and message then
-                        -- format the message to send to client 'Received nickname target: message'
-                        return string.format('Received: %s PRIVMSG: %s', sender, message)
+                        if target == config.nick then
+                            -- format the message to send to client 'Received nickname PRIVMSG: message' if it is a direct message
+                            return string.format('Received: %s PRIVMSG: %s', sender, message)
+                        else
+                            -- format the message to send to client 'Received nickname target: message' if it is from the channel
+                            return string.format('Received: %s %s: %s', sender, target, message)
+                        end
+                    end
+                -- handles messages when a person joins the server
+                elseif response:match('^:.* JOIN') then
+                    local sender, channel = response:match(':(%S+)!.* JOIN :?(%S+)')
+                    if sender and channel then
+                        return string.format('%s has joined %s', sender, channel)
+                    end
+                -- handles messages when a person leaves the server
+                elseif response:match('^:.* PART') then
+                    local sender, channel = response:match(':(%S+)!.* PART (%S+)')
+                    if sender and channel then
+                        return string.format('%s has left %s', sender, channel)
                     end
                 end
             elseif err == 'timeout' then
