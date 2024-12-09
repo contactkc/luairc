@@ -80,16 +80,16 @@ if loginSuccess then
         end
     end
 
-    local function handlePolling()
+    --[[local function handlePolling()
         while true do
             connection.main_loop()  -- poll for new messages continuously
             coroutine.yield()  -- yield control to allow other coroutines
         end
-    end
+    end ]]--
 
     local serverCoroutine = coroutine.create(handleServerMessages)
     local inputCoroutine = coroutine.create(handleUserInput)
-    local pollingCoroutine = coroutine.create(handlePolling)
+    --local pollingCoroutine = coroutine.create(handlePolling)
 
     -- main loop
     while true do
@@ -107,12 +107,13 @@ if loginSuccess then
             os.exit()
         end
 
-        -- attempt to resume main loop coroutine
+        --[[-- attempt to resume main loop coroutine
         success, result = coroutine.resume(pollingCoroutine)
         if not success then
             print('Error in main loop: ', result)
             os.exit()
         end
+        ]]--
 
         socket.sleep(0.1) -- to reduce cpu usage
     end

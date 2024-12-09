@@ -73,7 +73,6 @@ function main_loop()
         if message then
             print(message) -- output received message
         end
-
         socket.sleep(0.1)
     end
 end
