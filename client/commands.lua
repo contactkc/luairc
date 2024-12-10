@@ -65,11 +65,14 @@ function Commands.handleCommand(input)
             print(' - ' .. desc)
         end
     elseif command == 'guessnumber' then
-        GuessNumber.startGame()
+        local game = GuessNumber.new()
+        game:startGame()
     elseif command == 'hangman' then
-        Hangman.startGame()
+        local game = Hangman.new()
+        game:startGame()
     elseif command == 'tictactoe' then
-        TicTacToe.startGame()
+        local game = TicTacToe.new()
+        game:startGame()
     else
         print('Command not found!: ' .. command)
     end
