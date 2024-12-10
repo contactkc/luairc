@@ -56,6 +56,13 @@ end
 -- client starts if auth is successful
 if loginSuccess then
     Client.login(config.nick, config.username)
+    print(' _     _    _         _____ _____   _____ ')
+    print('| |   | |  | |  /\\   |_   _|  __ \\ / ____|')
+    print('| |   | |  | | /  \\    | | | |__) | |     ')
+    print('| |   | |  | |/ /\\ \\   | | |  _  /| |     ')
+    print('| |___| |__| / ____ \\ _| |_| | \\ \\| |____ ')
+    print('|______\\____/_/    \\_\\_____|_|  \\_ \\_____|')
+    print('\n')
     print('IRC client has started! Please type commands to start. /help if stuck.')
 
     -- coroutines for server messages and user input
